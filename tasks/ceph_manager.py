@@ -698,10 +698,13 @@ class Thrasher:
                 # Ignore errors because live_osds is in flux
                 proc = self.ceph_manager.osd_admin_socket(osd, command=['dump_ops_in_flight'],
                                      check_status=False)
+                log.debug(proc.stdout.getvalue())
                 proc = self.ceph_manager.osd_admin_socket(osd, command=['dump_blocked_ops'],
                                      check_status=False)
+                log.debug(proc.stdout.getvalue())
                 proc = self.ceph_manager.osd_admin_socket(osd, command=['dump_historic_ops'],
                                      check_status=False)
+                log.debug(proc.stdout.getvalue())
 
     @log_exc
     def do_thrash(self):
