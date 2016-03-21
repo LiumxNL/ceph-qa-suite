@@ -1,0 +1,31 @@
+roles:
+- - mon.a
+  - osd.0
+  - osd.1
+  - osd.2
+  - client.0
+tasks:
+- install:
+- ceph:
+    log-whitelist:
+    - wrongly marked me down
+    - slow request
+- exec:
+    client.0:
+      - sudo ceph osd pool create base 4
+      - sudo ceph osd pool create cache 4
+      - sudo ceph osd pool create cache-2 4
+      - sudo ceph osd tier add base cache
+      - if sudo ceph osd tier add cache cache-2
+      - then echo "fail to prevent setting multiple tiers"
+      - exit 1
+      - else echo "success to prevent setting multiple tiers"
+      - fi
+      - sudo ceph osd tier remove base cache
+      - sudo ceph osd tier add cache cache-2
+      - if sudo ceph osd tier add base cache
+      - then echo "fail to prevent setting multiple tiers"
+      - exit 1
+      - else echo "success to prevent setting multiple tiers"
+      - fi
+      - sudo ceph osd tier remove cache cache-2
